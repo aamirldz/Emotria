@@ -195,7 +195,7 @@ export function WebcamFeed({ onDetections, isActive }: WebcamFeedProps) {
         onDetectionsRef.current = onDetections;
     }, [onDetections]);
 
-    // ── Load all face-api.js models ───────────────────────────────────
+    // ── Load face-api.js models (all in parallel for speed) ────────────
     useEffect(() => {
         if (modelsLoaded || modelLoading) return;
 
@@ -207,27 +207,18 @@ export function WebcamFeed({ onDetections, isActive }: WebcamFeedProps) {
 
                 const MODEL_URL = "/models";
 
-                // Try loading SSD MobileNet v1 first (most accurate)
-                // Fall back to TinyFaceDetector if it fails
-                let useSSD = false;
-                try {
-                    await faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL);
-                    useSSD = true;
-                    console.log("[Emotria] ✅ SSD MobileNet v1 loaded (high accuracy)");
-                } catch {
-                    console.log("[Emotria] SSD MobileNet not found, using TinyFaceDetector");
-                    await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
-                }
-
-                // Load expression + landmark models in parallel
+                // Load TinyFaceDetector (189KB) + Expression (322KB) + Landmarks (348KB)
+                // Total: ~860KB — loads in 1-2 seconds
+                // All 3 models loaded in parallel for fastest startup
                 await Promise.all([
+                    faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
                     faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL),
                     faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
                 ]);
 
-                setDetectorType(useSSD ? "SSD MobileNet v1" : "TinyFaceDetector");
+                setDetectorType("TinyFaceDetector");
                 setModelsLoaded(true);
-                console.log("[Emotria] ✅ All models loaded. Detector:", useSSD ? "SSD" : "Tiny");
+                console.log("[Emotria] ✅ All models loaded (~860KB)");
             } catch (err) {
                 console.error("[Emotria] Model loading failed:", err);
                 setError("Failed to load AI models. Please refresh.");
@@ -239,7 +230,7 @@ export function WebcamFeed({ onDetections, isActive }: WebcamFeedProps) {
         loadModels();
     }, [modelsLoaded, modelLoading]);
 
-    // ── Start webcam at highest supported resolution ──────────────────
+    // ── Start webcam (runs in parallel with model loading) ────────────
     useEffect(() => {
         if (!isActive) {
             setCameraReady(false);
@@ -305,32 +296,20 @@ export function WebcamFeed({ onDetections, isActive }: WebcamFeedProps) {
         const faceapi = faceApiRef.current;
         if (!faceapi) return;
 
-        const useSSD = detectorType === "SSD MobileNet v1";
-
         async function detect() {
             const video = videoRef.current;
             const canvas = canvasRef.current;
             if (!video || !canvas || !faceapi || video.readyState < 2) return;
 
             try {
-                // Choose detector based on what loaded
-                let results;
-                if (useSSD) {
-                    results = await faceapi
-                        .detectAllFaces(video, new faceapi.SsdMobilenetv1Options({
-                            minConfidence: 0.3,
-                        }))
-                        .withFaceLandmarks()
-                        .withFaceExpressions();
-                } else {
-                    results = await faceapi
-                        .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions({
-                            inputSize: 416,
-                            scoreThreshold: 0.35,
-                        }))
-                        .withFaceLandmarks()
-                        .withFaceExpressions();
-                }
+                // TinyFaceDetector: fast + accurate with AccuracyEngine smoothing
+                const results = await faceapi
+                    .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions({
+                        inputSize: 416,
+                        scoreThreshold: 0.35,
+                    }))
+                    .withFaceLandmarks()
+                    .withFaceExpressions();
 
                 // Canvas setup
                 const dw = video.clientWidth;
@@ -497,9 +476,8 @@ export function WebcamFeed({ onDetections, isActive }: WebcamFeedProps) {
             }
         }
 
-        // Detection interval: 120ms for SSD (~8 FPS), 150ms for Tiny (~7 FPS)
-        const interval = useSSD ? 120 : 150;
-        detectIntervalRef.current = setInterval(detect, interval);
+        // Detection every 150ms (~7 detection FPS, video renders at full FPS)
+        detectIntervalRef.current = setInterval(detect, 150);
         detect();
 
         return () => {
