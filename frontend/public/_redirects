@@ -1,0 +1,3 @@
+# Cloudflare Pages routing for Next.js static export
+/dashboard   /dashboard/index.html   200
+/dashboard/  /dashboard/index.html   200
