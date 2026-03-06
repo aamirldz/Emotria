@@ -213,9 +213,9 @@ export function WebcamFeed({ onDetections, isActive }: WebcamFeedProps) {
                 try {
                     await faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL);
                     useSSD = true;
-                    console.log("[FaceAI] ✅ SSD MobileNet v1 loaded (high accuracy)");
+                    console.log("[Emotria] ✅ SSD MobileNet v1 loaded (high accuracy)");
                 } catch {
-                    console.log("[FaceAI] SSD MobileNet not found, using TinyFaceDetector");
+                    console.log("[Emotria] SSD MobileNet not found, using TinyFaceDetector");
                     await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
                 }
 
@@ -227,9 +227,9 @@ export function WebcamFeed({ onDetections, isActive }: WebcamFeedProps) {
 
                 setDetectorType(useSSD ? "SSD MobileNet v1" : "TinyFaceDetector");
                 setModelsLoaded(true);
-                console.log("[FaceAI] ✅ All models loaded. Detector:", useSSD ? "SSD" : "Tiny");
+                console.log("[Emotria] ✅ All models loaded. Detector:", useSSD ? "SSD" : "Tiny");
             } catch (err) {
-                console.error("[FaceAI] Model loading failed:", err);
+                console.error("[Emotria] Model loading failed:", err);
                 setError("Failed to load AI models. Please refresh.");
             } finally {
                 setModelLoading(false);
@@ -272,7 +272,7 @@ export function WebcamFeed({ onDetections, isActive }: WebcamFeedProps) {
                         setError(null);
                         const vw = videoRef.current?.videoWidth || 0;
                         const vh = videoRef.current?.videoHeight || 0;
-                        console.log(`[FaceAI] Camera: ${vw}×${vh}`);
+                        console.log(`[Emotria] Camera: ${vw}×${vh}`);
                     };
                 }
             } catch {
@@ -493,7 +493,7 @@ export function WebcamFeed({ onDetections, isActive }: WebcamFeedProps) {
                     fpsCounterRef.current = { frames: 0, lastTime: now };
                 }
             } catch (err) {
-                console.error("[FaceAI] Detection error:", err);
+                console.error("[Emotria] Detection error:", err);
             }
         }
 
@@ -533,8 +533,8 @@ export function WebcamFeed({ onDetections, isActive }: WebcamFeedProps) {
                 <div className="flex items-center gap-2 glass px-3 py-1.5 rounded-full">
                     <span
                         className={`w-2 h-2 rounded-full ${cameraReady && modelsLoaded
-                                ? "bg-emerald-400 animate-pulse"
-                                : "bg-yellow-400 animate-pulse"
+                            ? "bg-emerald-400 animate-pulse"
+                            : "bg-yellow-400 animate-pulse"
                             }`}
                     />
                     <span className="text-[10px] font-medium text-white/80">

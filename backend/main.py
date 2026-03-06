@@ -34,7 +34,7 @@ from storage.database import EmotionDatabase
 
 # ── Initialize app ──────────────────────────────────────────────────────
 app = FastAPI(
-    title="FaceAI — Emotion Recognition API",
+    title="Emotria — Emotion Recognition API",
     description="Real-time facial expression recognition and behavior analysis.",
     version="1.0.0",
 )
@@ -122,7 +122,7 @@ async def root():
     """API health check."""
     return {
         "status": "online",
-        "service": "FaceAI Emotion Recognition API",
+        "service": "Emotria Emotion Recognition API",
         "version": "1.0.0",
         "demo_mode": emotion_classifier.is_demo_mode,
     }
@@ -253,7 +253,7 @@ async def websocket_detect(websocket: WebSocket):
 async def startup():
     """Run on server startup."""
     print("=" * 60)
-    print("  FaceAI — Emotion Recognition API")
+    print("  Emotria — Emotion Recognition API")
     print(f"  Demo mode: {emotion_classifier.is_demo_mode}")
     print("=" * 60)
 

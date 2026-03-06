@@ -1,4 +1,4 @@
-# FaceAI Backend — Python Dependencies
+# Emotria Backend — Python Dependencies
 # Install with: pip install -r requirements.txt
 
 # Core

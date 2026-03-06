@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "FaceAI — Facial Expression Recognition & Behavior Analysis",
+  title: "Emotria — Facial Expression Recognition & Behavior Analysis",
   description:
     "Advanced AI-powered real-time facial emotion detection system with behavior analytics, multi-person recognition, and emotional intelligence insights.",
   keywords: [

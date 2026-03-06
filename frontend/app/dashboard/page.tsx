@@ -184,7 +184,7 @@ export default function Dashboard() {
                                 </svg>
                             </div>
                             <span className="text-base font-bold tracking-tight">
-                                Face<span className="gradient-text-blue">AI</span>
+                                Emot<span className="gradient-text-blue">ria</span>
                             </span>
                         </Link>
                         <div className="w-px h-6 bg-border hidden sm:block" />
@@ -209,8 +209,8 @@ export default function Dashboard() {
                             <button
                                 onClick={() => setCameraActive(!cameraActive)}
                                 className={`px-4 py-2 rounded-lg text-xs font-medium transition-all ${cameraActive
-                                        ? "bg-destructive/20 text-destructive hover:bg-destructive/30 border border-destructive/30"
-                                        : "bg-primary text-primary-foreground hover:bg-primary/90"
+                                    ? "bg-destructive/20 text-destructive hover:bg-destructive/30 border border-destructive/30"
+                                    : "bg-primary text-primary-foreground hover:bg-primary/90"
                                     }`}
                             >
                                 {cameraActive ? "⏹ Stop Camera" : "▶ Start Camera"}

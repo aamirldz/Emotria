@@ -1,4 +1,4 @@
-# FaceAI — AI-Based Facial Expression Recognition & Behavior Analysis System
+# Emotria — AI-Based Facial Expression Recognition & Behavior Analysis System
 
 A real-time facial emotion detection system using deep learning (CNN) and computer vision (OpenCV). Features multi-person detection, behavior analytics, and a premium Next.js dashboard with an interactive globe landing page.
 

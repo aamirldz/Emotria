@@ -48,7 +48,7 @@ export default function Home() {
             </svg>
           </div>
           <span className="text-xl font-bold tracking-tight">
-            Face<span className="gradient-text-blue">AI</span>
+            Emot<span className="gradient-text-blue">ria</span>
           </span>
         </div>
         <div className="flex items-center gap-6 text-sm text-muted-foreground">
@@ -104,8 +104,8 @@ export default function Home() {
               <span
                 key={emotion}
                 className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-500 ${i === activeEmotion
-                    ? "bg-primary/20 text-primary border border-primary/30 scale-110"
-                    : "bg-muted/50 text-muted-foreground border border-transparent"
+                  ? "bg-primary/20 text-primary border border-primary/30 scale-110"
+                  : "bg-muted/50 text-muted-foreground border border-transparent"
                   }`}
               >
                 {EMOTION_EMOJIS[emotion]} {emotion}
@@ -246,7 +246,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="relative z-10 border-t border-border px-8 py-6">
         <div className="flex items-center justify-between text-xs text-muted-foreground">
-          <span>FaceAI — AI-Based Facial Expression Recognition System</span>
+          <span>Emotria — AI-Based Facial Expression Recognition System</span>
           <span>Built with TensorFlow, OpenCV, Next.js</span>
         </div>
       </footer>
